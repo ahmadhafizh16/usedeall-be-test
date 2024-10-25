@@ -5,7 +5,7 @@ import { PrismaService } from 'src/ship/Module/prisma.service';
 
 @Injectable()
 export class FindUserByIdTask {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
 
   async run(userId: number): Promise<User> {
     try {
@@ -16,10 +16,8 @@ export class FindUserByIdTask {
       });
 
       return user;
-    }
-    catch (err) {
+    } catch (Error) {
       throw new HttpNotFoundException();
     }
-
   }
 }

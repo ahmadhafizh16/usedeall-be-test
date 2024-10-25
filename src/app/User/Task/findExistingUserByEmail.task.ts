@@ -1,7 +1,5 @@
-import { Global, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { UserTransformer } from 'src/app/User/Transformer/user.transformer';
-import { HttpNotFoundException } from 'src/ship/Exception/httpNotFound.exception';
 import { PrismaService } from 'src/ship/Module/prisma.service';
 
 @Injectable()

@@ -12,7 +12,7 @@ export class RegisterUserAction {
   ) {}
 
   async run(request: RegisterUserRequest): Promise<User> {
-    let { email } = request;
+    const { email } = request;
 
     const userExists = await this.findExistingUserByEmailTask.run(email);
 

@@ -13,9 +13,9 @@ export class LoginUserAction {
   ) {}
 
   async run(request: LoginUserRequest): Promise<Token> {
-    let { email, password } = request;
+    const { email, password } = request;
 
-    let user = await this.findExistingUserByEmailTask.run(email);
+    const user = await this.findExistingUserByEmailTask.run(email);
 
     if (!user) {
       throw new HttpException('Wrong email or password.', HttpStatus.BAD_REQUEST);
@@ -27,8 +27,8 @@ export class LoginUserAction {
       throw new HttpException('Wrong email or password.', HttpStatus.BAD_REQUEST);
     }
 
-    let token = await this.jwtService.signAsync(user);
-    let tokenData = await this.jwtService.decode(token);
+    const token = await this.jwtService.signAsync(user);
+    const tokenData = await this.jwtService.decode(token);
 
     return {
       access_token: token,

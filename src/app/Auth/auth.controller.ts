@@ -23,7 +23,7 @@ export class AuthController extends BaseController {
   @ApiBody({
     type: RegisterUserRequest,
   })
-  async register(@Body() request: RegisterUserRequest): Promise<ResponseWrapper<Object>> {
+  async register(@Body() request: RegisterUserRequest): Promise<ResponseWrapper<object>> {
     const user = await this.authService.registerUser(request);
 
     return {
@@ -38,7 +38,7 @@ export class AuthController extends BaseController {
   @ApiBody({
     type: LoginUserRequest,
   })
-  async login(@Body() request: LoginUserRequest): Promise<ResponseWrapper<Object>> {
+  async login(@Body() request: LoginUserRequest): Promise<ResponseWrapper<object>> {
     const token: Token = await this.authService.login(request);
 
     return {

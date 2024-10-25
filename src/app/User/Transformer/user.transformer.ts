@@ -3,7 +3,7 @@ import { ParentTransformer } from 'src/ship/Parent/Transformer/parentTransformer
 import { Gender } from '../Enum/user.enum';
 
 export class UserTransformer extends ParentTransformer {
-  transform(user: User): Object {
+  transform(user: User): object {
     return this.buildResponse({
       id: user.id,
       email: user.email,

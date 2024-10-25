@@ -5,5 +5,9 @@
   "testRegex": "src/app/.*/Test/.*\\.e2e-spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "globalSetup": "<rootDir>/test/jest.setup.ts",
+  "moduleNameMapper": {
+    "^src/(.*)$": "<rootDir>/src/$1"
   }
 }

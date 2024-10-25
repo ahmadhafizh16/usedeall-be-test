@@ -2,10 +2,10 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { isEmpty, isNull } from 'lodash';
 
 export class ParentTransformer {
-  private response: Object = {};
-  transform(data: any): any { }
+  private response: object = {};
+  transform(_data: any): any {}
 
-  transformArray(data: Array<any>, transformerClass): Array<ParentTransformer> | Array<Object> {
+  transformArray(data: Array<any>, transformerClass): Array<ParentTransformer> | Array<object> {
     this.checkInstanceOfTransformerClass(transformerClass);
 
     return data.map((item) => transformerClass.transform(item));
@@ -18,8 +18,7 @@ export class ParentTransformer {
 
     if (isEmpty(data[relationName])) {
       this.response[relationName] = [];
-    }
-    else{
+    } else {
       this.response[relationName] = this.transformArray(data[relationName], transformerClass);
     }
   }

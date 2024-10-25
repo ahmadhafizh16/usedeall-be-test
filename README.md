@@ -1,71 +1,89 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Software Engineer Test
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a backend test for [dealls.com](), implemented using **NestJS** with Prisma as the ORM and **SQLite** for the database.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
+- [Porto Design Pattern](#porto-design-pattern)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Running the app](#running-the-app)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Linting and Formatting](#linting-and-formatting)
 
-## Description
 
-### NestJS Framework with Additional Adoption of [Porto Software Design Pattern](https://github.com/Mahmoudz/Porto)
-=====================================
+## Porto Design Pattern
 
-This project leverages the NestJS framework while adopting the Porto software design pattern to ensure high maintainability and reusability. The adoption includes additional layers such as Services before calling Action functions, which enhances validation using Zod and transforms request bodies if necessary.
+This project leverages the **Porto software design pattern** to ensure high maintainability and reusability. It organizes the code into containers (like `Auth`, `User`, etc.), with the following key components:
 
-### Clear Layers Architecture
+- **Actions**: These contain the business logic of the application. They are the primary drivers of behavior within each container and are where complex interactions take place.
+  
+- **Tasks**: Tasks are smaller units of functionality that are reusable across multiple actions. Tasks break down complex logic into manageable pieces and improve reusability.
 
-#### Containers Layer
-The business logic within this layer is organized into clear components known as `Actions` and `Tasks`. Each action initiates sequences of tasks with single responsibility principles (`run()` method).
+- **Services**: Additional layers such as Services are introduced before calling Action functions. These enhance validation using **Zod** and perform transformations on request bodies if necessary.
 
-#### Ship Layer
-Handles all infrastructure-related code, enabling easy scaling on demand by transitioning from monolithic structures to microservices.
+- **Controllers**: Controllers handle incoming HTTP requests and route them to the appropriate **Services**. They are the entry point for external requests and are responsible for handling request data, calling service function, and returning responses.
 
-#### Clean Components Organization
-Business logic encapsulated in containers ensures modularity through actions/tasks structure.
+- **Transformers**: Transformers are responsible for formatting data before sending it in the response. They ensure that the output sent to the client is consistent and properly structured. For instance, they can be used to transform raw database records into a specific format or shape before sending them back to the API consumers.
 
-##### Service Layer Integration Before Calling Actions
+## Project Structure
 
-Services act as intermediaries between controllers/actions ensuring robust input validation using tools like Zod.
+The project follows the **Porto Design Pattern**, which ensures high maintainability and reusability through modular, decoupled code.
 
-#### Controller Interaction With Service And Then To Actions If Needed
-Controllers interact directly with services rather than multiple actions directly , thus maintaining loose coupling.
-
-## Project setup
-
-```bash
-$ npm install
-$ chmod +x ./create-module.sh 
-$ npx prisma migrate deploy --schema=./src/ship/database/schema.prisma
-$ npx prisma generate --schema=./src/ship/database/schema.prisma
-$ npx prisma migrate dev --name init --schema=./src/ship/database/schema.prisma
+```
+src/
+│
+├── app/
+│   ├── Auth/            # Authentication module
+│   └── User/            # User module
+│   
+│
+├── ship/                # Class that mostly used by all container in app folder
+│   ├── database/        # database schema for prisma and SQLite Location
+│   ├── Module/          # Module that will be commonly shared
+│   └── Parent/          # For abstractions class that will be extended in container
+│
+├── test/                # Tests configuration and setup, test files located in Test 
+│                          directory in every container
+│
+└── main.ts              # Application entry point
 ```
 
-### Addtional Generator for Basic Container Files
+## Technologies Used
 
-You can generate basic container files using this bash command:
-```bash
-$ chmod +x ./create-module.sh 
-```
-The prompt will ask you for container name, and will generate blank files that you need to edit the name of the files manually.
+- **NestJS**: A progressive Node.js framework for building efficient and scalable server-side applications.
+- **Prisma**: A modern database toolkit to query, migrate and model your database with ease.
+- **SQLite**: The database used in this project.
+- **Jest**: For writing and running tests.
+- **Faker.js**: To generate random data in the tests, making the test suite more comprehensive.
+- **Swagger**: For generating API documentation.
 
-## Compile and run the project
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ahmadhafizh16/usedeall-be-test.git
+   cd usedeall-be-test
+   ```
+
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Setup environment variables:
+
+   For convenience's sake, I remove gitignore for .env and .env test. So no need anything to set any environment variables.
+
+4. Run the Prisma migrations to set up the database schema:
+   ```bash
+   npm run db:migrate
+   ```
+
+## Running the app
+
+The app will running at `localhost:3000`
 
 ```bash
 # development
@@ -78,41 +96,41 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+## API Documentation
+
+The API documentation is auto-generated using Swagger.
+
+- After running the app, you can access the documentation at: [http://localhost:3000/v1/apidocs](http://localhost:3000/v1/apidocs)
+
+- Additionaly, I added `GET v1/user/me` to test the token validity againts authorization guard.
+
+
+## Testing
+
+This project uses **Jest** for testing. The tests are written to ensure the API behaves correctly and efficiently.
+
+Additionally, **Faker.js** is used to generate random but valid test data, which makes the tests more robust by verifying the API's behavior under various conditions.
+
+Since I'm choosing E2E Test for the Test, use this command to run tests:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run test:e2e
 ```
 
-## Resources
+## Linting and Formatting
 
-Check out a few resources that may come in handy when working with NestJS:
+The project uses **ESLint** for linting to ensure consistent code quality.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+To run linting:
 
-## Support
+```bash
+npm run lint
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+To fix linting errors automatically:
 
-## Stay in touch
+```bash
+npm run lint:fix
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
